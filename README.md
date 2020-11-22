@@ -64,11 +64,11 @@ On the other side, we think 5-years-long data is stable enough to be input for m
 |J | 128 | | | 1024 | Y | |
 
 
-Each model contains the LSTM layer and fully connected neural networks with BN or dropout(D). In LSTM column, n\*k means k layers with n neurons. In D/BN columns, number represents dropout rate and Y means BN is used instead of dropout. In model A, C and E, there is a timestep-wise dimension reduction (TD) in the middle which reduced the dimension. Finally, a standard fully connected layer with softmax will be our output. In all fully connected layers we use ReLU as the activation function to boost the training speed. The loss is counted by cross-entropy and optimizer is Adam with learning rate $10^{-8}$. We set the batch size for 14 and trained for 20000 epochs.
+Each model contains the LSTM layer and fully connected neural networks (FC) with batch normalization (BN) or dropout(D). In LSTM column, n\*k means k layers with n neurons. In D/BN columns, number represents dropout rate and Y means BN is used instead of dropout. In model A, C and E, there is a timestep-wise dimension reduction (TD) in the middle which reduced the dimension. Finally, a standard fully connected layer with softmax will be our output. In all fully connected layers we use ReLU as the activation function to boost the training speed. The loss is counted by cross-entropy and optimizer is Adam with learning rate $10^{-8}$. We set the batch size for 14 and trained for 20000 epochs.
 
 
 ### BERT
-There are two kinds of pre-trained models of BERT we use: BERT-base and BERT-base-multilingual. Each of them has the version of cased and uncased which the wordpiece has the capital sub-words or not. We will fine-tune these pre-trained models by our task for 10 epochs. BERT-base has 12 layers, 768 hidden neurons and 12 attention heads for total 110 millions of parameters. It trained on English texts. BERT-base-multilingual-cased (BERT-mc) was trained on 104 languages based on Bert-cased and BERT-base-multilingual-uncased (BERT-mu) was trained on 102 languages based on Bert-cased. We set batch size for 14 with learning rate for $10^{-5}$. 
+There are two kinds of pre-trained models of BERT we use: BERT-base and BERT-base-multilingual. Each of them has the version of cased and uncased which the wordpiece has the capital sub-words or not. We will fine-tune these pre-trained models by our task for 10 epochs. BERT-base has 12 layers, 768 hidden neurons and 12 attention heads for total 110 millions of parameters. It trained on English texts. BERT-base-multilingual-cased (BERT-mc) was trained on 104 languages based on Bert-base-cased (BERT-c) and BERT-base-multilingual-uncased (BERT-mu) was trained on 102 languages based on Bert-base-cased (BERT-u). We set batch size for 14 with learning rate for $10^{-5}$. 
 
 ### sZymborski Projection System (ZiPS)
 sZymborski Projection System (ZiPS) created by Dan Szymborski weights heavily for recent years which included velocity and pitch data for multiple years. Both are similar to Marcel. Furthermore, ZiPS also use comparable players to adjust the prediction. You can find more information in [here](https://www.fangraphs.com/projections.aspx?pos=all&stats=bat&type=zipsp1&team=0&lg=all&players=0).
@@ -81,10 +81,13 @@ We use 892 data points from 1998 to 2017 as training data and 265 data points in
 ### Model Performance
 We use following four rates to evaluate our models performance:
 
-MPA = $\frac{{\rm Right~Prediction}}{{\rm Total~Data~Points}}$
-H1C = $\frac{{\rm Higher~Prediction~For~1~Class}}{{\rm Total~Data~Points}}$
-L1C = $\frac{{\rm Lower~Prediction~For~1~Class}}{{\rm Total~Data~Points}}$
-TPA = ${\rm MPA} + {\rm H1C} + {\rm L1C}$
+MPA = Right Prediction / Total Data Points
+
+H1C = Higher Prediction For 1 Class / Total Data Points
+
+L1C = Lower Prediction For 1 Class / Total Data Points
+
+TPA = MPA + H1C + L1C
 
 
 #### Prediction accuracy of 2018
