@@ -35,12 +35,12 @@ We collect players recorded in MLB with 20 features for every year during the pe
 Since home runs (HR) is the most effective way to score in the ball game, we set it as the main goal to predict in this paper. However, it is not only practically impossible but inefficient to predict the precision number of HRs. Therefore, we spilt HRs into disjoint subsets with every 5 HRs and each of them will be a class. We choose these classes to be our outputs. For our data, we have 12 classes. Following table shows our classes:
 |Class| Numbers | Class | Numbers|
 |---|---|---|---|
-|C~1~ | 0-4 | C~7~ | 30-34|
-|C~2~ | 5-9 | C~8~ | 35-39|
-|C~3~ | 10-14 | C~9~ | 40-44|
-|C~4~ | 15-19 | C~10~ | 45-49|
-|C~5~ | 20-24 | C~11~ | 50-54|
-|C~6~ | 25-29 | C~12~ | 55-59|
+|1 | 0-4 | 7 | 30-34|
+|2 | 5-9 | 8 | 35-39|
+|3 | 10-14 | 9 | 40-44|
+|4 | 15-19 | 10 | 45-49|
+|5 | 20-24 | 11 | 50-54|
+|6 | 25-29 | 12 | 55-59|
 
 
 On the other side, we think 5-years-long data is stable enough to be input for models to know the player well. Therefore, we use 5 continued years stat with 20 features for each year of a player to predict his HRs class in the sixth year.
@@ -64,11 +64,11 @@ On the other side, we think 5-years-long data is stable enough to be input for m
 |J | 128 | | | 1024 | Y | |
 
 
-Each model contains the LSTM layer and fully connected neural networks with BN or dropout(D). In LSTM column, n\*k means k layers with n neurons. In D/BN columns, number represents dropout rate and Y means BN is used instead of dropout. In model A, C and E, there is a timestep-wise dimension reduction (TD) in the middle which reduced the dimension. Finally, a standard fully connected layer with softmax will be our output. In all fully connected layers we use ReLU as the activation function to boost the training speed. The loss is counted by cross-entropy and optimizer is Adam with learning rate 10^-8^. We set the batch size for 14 and trained for 20000 epochs.
+Each model contains the LSTM layer and fully connected neural networks with BN or dropout(D). In LSTM column, n\*k means k layers with n neurons. In D/BN columns, number represents dropout rate and Y means BN is used instead of dropout. In model A, C and E, there is a timestep-wise dimension reduction (TD) in the middle which reduced the dimension. Finally, a standard fully connected layer with softmax will be our output. In all fully connected layers we use ReLU as the activation function to boost the training speed. The loss is counted by cross-entropy and optimizer is Adam with learning rate $10^{-8}$. We set the batch size for 14 and trained for 20000 epochs.
 
 
 ### BERT
-There are two kinds of pre-trained models of BERT we use: BERT-base and BERT-base-multilingual. Each of them has the version of cased and uncased which the wordpiece has the capital sub-words or not. We will fine-tune these pre-trained models by our task for 10 epochs. BERT-base has 12 layers, 768 hidden neurons and 12 attention heads for total 110 millions of parameters. It trained on English texts. BERT-base-multilingual-cased (BERT-mc) was trained on 104 languages based on Bert-cased and BERT-base-multilingual-uncased (BERT-mu) was trained on 102 languages based on Bert-cased. We set batch size for 14 with learning rate for 10^^-5^. 
+There are two kinds of pre-trained models of BERT we use: BERT-base and BERT-base-multilingual. Each of them has the version of cased and uncased which the wordpiece has the capital sub-words or not. We will fine-tune these pre-trained models by our task for 10 epochs. BERT-base has 12 layers, 768 hidden neurons and 12 attention heads for total 110 millions of parameters. It trained on English texts. BERT-base-multilingual-cased (BERT-mc) was trained on 104 languages based on Bert-cased and BERT-base-multilingual-uncased (BERT-mu) was trained on 102 languages based on Bert-cased. We set batch size for 14 with learning rate for $10^{-5}$. 
 
 ### sZymborski Projection System (ZiPS)
 sZymborski Projection System (ZiPS) created by Dan Szymborski weights heavily for recent years which included velocity and pitch data for multiple years. Both are similar to Marcel. Furthermore, ZiPS also use comparable players to adjust the prediction. You can find more information in [here](https://www.fangraphs.com/projections.aspx?pos=all&stats=bat&type=zipsp1&team=0&lg=all&players=0).
@@ -81,10 +81,10 @@ We use 892 data points from 1998 to 2017 as training data and 265 data points in
 ### Model Performance
 We use following four rates to evaluate our models performance:
 
-${\rm MPA} = \frac{{\rm Right~Prediction}}{{\rm Total~Data~Points}}$
-${\rm H1C} = \frac{{\rm Higher~Prediction~For~1~Class}}{{\rm Total~Data~Points}}$
-${\rm L1C} = \frac{{\rm Lower~Prediction~For~1~Class}}{{\rm Total~Data~Points}}$
-${\rm TPA} = {\rm MPA} + {\rm H1C} + {\rm L1C}$
+MPA = $\frac{{\rm Right~Prediction}}{{\rm Total~Data~Points}}$
+H1C = $\frac{{\rm Higher~Prediction~For~1~Class}}{{\rm Total~Data~Points}}$
+L1C = $\frac{{\rm Lower~Prediction~For~1~Class}}{{\rm Total~Data~Points}}$
+TPA = ${\rm MPA} + {\rm H1C} + {\rm L1C}$
 
 
 #### Prediction accuracy of 2018
@@ -95,7 +95,7 @@ ${\rm TPA} = {\rm MPA} + {\rm H1C} + {\rm L1C}$
 |ZiPS | 25.4 | 11.0 | 37.3 | 73.7 |
 |BERT-c | 46.8 | 12.8 | 13.6 | 73.2 |
 |BERT-u | 49.1 | 9.4 | 13.6 | 72.1 |
-|BERT-mc | *50.6* | 16.2 | 12.5 | *79.3* |
+|BERT-mc | **50.6** | 16.2 | 12.5 | **79.3** |
 |BERT-mu | 47.6 | 16.6 | 12.1 | 76.3 |
 
 #### Prediction accuracy of 2019 after retrain
@@ -105,8 +105,8 @@ ${\rm TPA} = {\rm MPA} + {\rm H1C} + {\rm L1C}$
 |LSTM D | 42.8 | 7.8 | 13.8 | 63.4 |
 |ZiPS | 30.1 | 16.0 | 19.7 | 65.8 |
 |BERT-c | 39.6 | 12.3 | 15.7 | 67.6 |
-|BERT-u | 39.2 | 13.4 | 17.9 | *70.5* |
-|BERT-mc | *44.4* | 9.7 | 15.3 | 69.4 |
+|BERT-u | 39.2 | 13.4 | 17.9 | **70.5** |
+|BERT-mc | **44.4** | 9.7 | 15.3 | 69.4 |
 |BERT-mu | 42.5 | 10.1 | 15.3 | 67.9 |
 
 
@@ -116,21 +116,21 @@ ${\rm TPA} = {\rm MPA} + {\rm H1C} + {\rm L1C}$
 |---|---|---|---|---|---|---|---|
 |LSTM B | 79 | 18 | 15 | 0 | 9 | 0 | 0 |
 |LSTM F | 79 | 22 | 16 | 0 | 11 | 1 | 0 |
-|BERT-c | 83 | *22* | 8 | 0 | 11 | 0 | 0  |
-|BERT-u | *89* | 17 | 14 | 1 | 8 | 1 | 0  |
-|BERT-mc | 84 | 17 | *23* | 0 | 9 | 1 | 0  |
-|BERT-mu | 81 | 17 | 11 | 0 | *17* | 0 | 0  |
+|BERT-c | 83 | **22** | 8 | 0 | 11 | 0 | 0  |
+|BERT-u | **89** | 17 | 14 | 1 | 8 | 1 | 0  |
+|BERT-mc | 84 | 17 | **23** | 0 | 9 | 1 | 0  |
+|BERT-mu | 81 | 17 | 11 | 0 | **17** | 0 | 0  |
 |Ground Truth | 107 | 43 | 41 | 25 | 27 | 8 |14 |
 
 #### Number of correct predictions in 2019 after retrain
 || 0-4 | 5-9 | 10-14 | 15-19 | 20-24 | 25-29 | 30+ |
 |---|---|---|---|---|---|---|---|
-|LSTM A | *81* | 18 | 4 | 0 | 9 | 1 | 0 |
+|LSTM A | **81** | 18 | 4 | 0 | 9 | 1 | 0 |
 |LSTM D | 80 | 14 | 11 | 0 | 7 | 0 | 0 |
 |BERT-c | 74 | 19 | 8 | 1 | 3 | 1 | 0  |
-|BERT-u | 71 | *22* | 4 | 0 | 7 | 1 | 0  |
-|BERT-mc | 75 | 18 | *12* | 0 | *13* | 1 | 0  |
-|BERT-mu | 73 | 22 | *12* | 0 | 6 | 1 | 0  |
+|BERT-u | 71 | **22** | 4 | 0 | 7 | 1 | 0  |
+|BERT-mc | 75 | 18 | **12** | 0 | **13** | 1 | 0  |
+|BERT-mu | 73 | 22 | **12** | 0 | 6 | 1 | 0  |
 |Ground Truth | 102 | 35 | 39 | 24 | 28 | 13 | 27 |
 
 #### Number of correct predictions of ZiPS
